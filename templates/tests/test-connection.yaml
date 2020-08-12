@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "metallb-nginx-demo.fullname" . }}-test-connection"
+  labels:
+    {{- include "metallb-nginx-demo.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "metallb-nginx-demo.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
